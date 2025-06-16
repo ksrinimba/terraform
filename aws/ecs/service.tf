@@ -67,7 +67,7 @@ resource "aws_ecs_task_definition" "service" {
     "cpu": 512,
     "memory": 1024,
     "essential": true,
-    "image": "amazon/amazon-ecs-sample",
+    "image": "public.ecr.aws/nginx/nginx:stable-perl",
     "name": "nginx",
     "portMappings": [
       {
@@ -83,22 +83,22 @@ TASK_DEFINITION
 
 # "image": "751017186421.dkr.ecr.us-east-2.amazonaws.com/sriniecs:1.27.2",
 
-# resource "aws_ecs_service" "nginx" {
-#   name            = "nginx"
-#   cluster         = "arn:aws:ecs:us-east-2:751017186421:cluster/srini-ecr-service" # aws_ecs_cluster.foo.id
-#   task_definition = aws_ecs_task_definition.service.arn #aws_ecs_task_definition.mongo.arn
-#   launch_type     = "FARGATE"
-#   desired_count   = 1
-#   network_configuration {
-#     subnets = [
-#       "subnet-02875222072524e0a"
-#     ]
-#     security_groups = [
-#       "sg-0d651c686d560ce78",
-#     ]
-#     assign_public_ip = false
-#   }
-# }
+resource "aws_ecs_service" "nginx" {
+  name            = "nginx"
+  cluster         = "arn:aws:ecs:us-east-2:751017186421:cluster/srini-ecr-service" # aws_ecs_cluster.foo.id
+  task_definition = aws_ecs_task_definition.service.arn #aws_ecs_task_definition.mongo.arn
+  launch_type     = "FARGATE"
+  desired_count   = 1
+  network_configuration {
+    subnets = [
+      "subnet-02875222072524e0a"
+    ]
+    security_groups = [
+      "sg-0d651c686d560ce78",
+    ]
+    assign_public_ip = false
+  }
+}
 #   iam_role        = "arn:aws:iam::751017186421:role/ecsTaskExecutionRole" #aws_iam_role.foo.arn
 #   depends_on      = [aws_iam_role_policy.foo]
 
