@@ -87,16 +87,17 @@ resource "aws_ecs_service" "nginx" {
   name            = "nginx"
   cluster         = "arn:aws:ecs:us-east-2:751017186421:cluster/srini-ecr-service" # aws_ecs_cluster.foo.id
   task_definition = aws_ecs_task_definition.service.arn #aws_ecs_task_definition.mongo.arn
+  # ServiceRoleForECS arn:aws:iam::751017186421:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS
   launch_type     = "FARGATE"
   desired_count   = 1
   network_configuration {
     subnets = [
-      "subnet-02875222072524e0a"
+      "subnet-058988e41ae4921a4","subnet-037a05886defedbd7","subnet-033274574520933b0"
     ]
     security_groups = [
-      "sg-0d651c686d560ce78",
+      "sg-0f1973435498a9dc9"
     ]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 }
 #   iam_role        = "arn:aws:iam::751017186421:role/ecsTaskExecutionRole" #aws_iam_role.foo.arn
