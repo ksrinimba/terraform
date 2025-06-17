@@ -1,3 +1,9 @@
+## Sample to create a task and a service
+# DONE: Test image-pull from a private repo, this was giving token-error before
+# TODO: Create a completely private subnet, with no internet access and deploy a private image
+# TODO: Parameterize Image and networking (subnet+sg)
+# TODO: Move the container-def to a file (jsonencode)
+
 terraform {
   backend "s3" {
     bucket         = "state-bucket-4-terra" # Your bucket name
@@ -13,41 +19,6 @@ provider "aws" {
   region = "us-east-2" # Change to your preferred region
 }
 
-# resource "aws_ecs_cluster" "foo" {
-#   name = "white-hart"
-
-#   setting {
-#     name  = "containerInsights"
-#     value = "enabled"
-#   }
-# }
-
-
-
-# resource "aws_ecs_task_definition" "service" {
-#   family = "service"
-#   container_definitions = jsonencode([
-#     {
-#       name      = "first"
-#       image     = "service-first"
-#       cpu       = 10
-#       memory    = 512
-#       essential = true
-#       portMappings = [
-#         {
-#           containerPort = 80
-#           hostPort      = 80
-#         }
-#       ]
-#     }
-#   ])
-
-#   volume {
-#     name      = "service-storage"
-#     host_path = "/ecs/service-storage"
-#   }
-
-# }
 
 resource "aws_ecs_task_definition" "service" {
   family                   = "service"
@@ -67,7 +38,7 @@ resource "aws_ecs_task_definition" "service" {
     "cpu": 512,
     "memory": 1024,
     "essential": true,
-    "image": "public.ecr.aws/nginx/nginx:stable-perl",
+    "image": "751017186421.dkr.ecr.us-east-2.amazonaws.com/sriniecs:1.27.2",
     "name": "nginx",
     "portMappings": [
       {
@@ -81,7 +52,10 @@ resource "aws_ecs_task_definition" "service" {
 TASK_DEFINITION
 }
 
+
+########## CUT-PASTE BUFFER
 # "image": "751017186421.dkr.ecr.us-east-2.amazonaws.com/sriniecs:1.27.2",
+#    "image": "public.ecr.aws/nginx/nginx:stable-perl",
 
 resource "aws_ecs_service" "nginx" {
   name            = "nginx"
@@ -129,4 +103,40 @@ resource "aws_ecs_service" "nginx" {
     #     "secretOptions": []
     # },
     # "systemControls": []
+
+# resource "aws_ecs_cluster" "foo" {
+#   name = "white-hart"
+
+#   setting {
+#     name  = "containerInsights"
+#     value = "enabled"
+#   }
+# }
+
+
+
+# resource "aws_ecs_task_definition" "service" {
+#   family = "service"
+#   container_definitions = jsonencode([
+#     {
+#       name      = "first"
+#       image     = "service-first"
+#       cpu       = 10
+#       memory    = 512
+#       essential = true
+#       portMappings = [
+#         {
+#           containerPort = 80
+#           hostPort      = 80
+#         }
+#       ]
+#     }
+#   ])
+
+#   volume {
+#     name      = "service-storage"
+#     host_path = "/ecs/service-storage"
+#   }
+
+# }
 
